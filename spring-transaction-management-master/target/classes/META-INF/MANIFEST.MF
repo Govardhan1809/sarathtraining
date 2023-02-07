@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: ustjavafsdb403
+Build-Jdk: 17.0.5
+Implementation-Title: datatranx
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: com.keysoft
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/datatranx
+Created-By: Maven Integration for Eclipse
+

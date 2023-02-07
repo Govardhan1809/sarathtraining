@@ -1,0 +1,65 @@
+server:
+  port: 9191
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: AUTHENTICATION-MICROSERVICE
+          uri: lb://AUTHENTICATION-MICROSERVICE
+          predicates:
+            - Path=/api/v1/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: AUTHENTICATION-MICROSERVICE
+                fallbackuri: forward:/authenticationFallBack
+        - id: BIDDING-MICROSERVICE
+          uri: lb://BIDDING-MICROSERVICE
+          predicates:
+            - Path=/bidder/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: BIDDING-MICROSERVICE
+                fallbackuri: forward:/biddingFallBack
+        - id: PRODUCT-MICROSERVICE
+          uri: lb://PRODUCT-MICROSERVICE
+          predicates:
+            - Path=/product/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: PRODUCT-MICROSERVICE
+                fallbackuri: forward:/productFallBack
+        - id: USER-MICROSERVICE
+          uri: lb://USER-MICROSERVICE
+          predicates:
+            - Path=/api/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: USER-MICROSERVICE
+                fallbackuri: forward:/userFallBack
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8762/eureka/
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 4000
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
+
